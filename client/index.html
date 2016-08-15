@@ -4,10 +4,27 @@
 <head>
     <meta charset="utf-8">
     <title>Simple Chat</title>
+
 </head>
 
 <body>
     <h1>Simple Chat</h1>
+    <script src="bower_components/socket.io-client/socket.io.js"></script>
+    <button id="emit">Emit</button>
+    <script>
+        var socket = io('192.168.1.233:3000/', {});
+
+        socket.on('connect', function() {
+            console.log('succesful connect');
+        });
+
+        emit.onclick = function() {
+            console.log('click');
+            socket.emit('message', {
+                data: Date.now()
+            });
+        };
+    </script>
 </body>
 
 </html>
