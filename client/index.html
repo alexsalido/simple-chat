@@ -4,27 +4,23 @@
 <head>
     <meta charset="utf-8">
     <title>Simple Chat</title>
-
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="/bower_components/angular-material/angular-material.css">
+    <link rel="stylesheet" href="/css/style.css" media="screen" charset="utf-8">
 </head>
 
 <body>
-    <h1>Simple Chat</h1>
+    <div ng-app="SimpleChat" layout="row" layout-align="center center" layout-fill="layout-fill">
+        <div ng-view flex="50"></div>
+    </div>
     <script src="bower_components/socket.io-client/socket.io.js"></script>
-    <button id="emit">Emit</button>
-    <script>
-        var socket = io('192.168.1.233:3000/', {});
-
-        socket.on('connect', function() {
-            console.log('succesful connect');
-        });
-
-        emit.onclick = function() {
-            console.log('click');
-            socket.emit('message', {
-                data: Date.now()
-            });
-        };
-    </script>
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/angular-aria/angular-aria.js"></script>
+    <script src="bower_components/angular-animate/angular-animate.js"></script>
+    <script src="bower_components/angular-route/angular-route.js"></script>
+    <script src="bower_components/angular-material/angular-material.js"></script>
+    <script src="/js/socket.js"></script>
+    <script src="/js/index.js"></script>
 </body>
 
 </html>

@@ -1,0 +1,19 @@
+<div layout="column" class="md-whiteframe-z1">
+    <md-toolbar>
+        <h2 class="md-toolbar-tools"><span>Chat</span></h2>
+    </md-toolbar>
+    <md-content layout="column">
+        <md-content class="conversation-box">
+            <div class="message-wrapper" ng-class="message.type=='received' ? 'received' : 'sent'" ng-repeat="message in conversation">
+                <div class="message" ng-class="">
+                    <span>{{message.message}}</span>
+                </div>
+            </div>
+        </md-content>
+        <div class="message-box" layout="row" layout-align="center center">
+            <textarea ng-model="message"></textarea>
+            <div flex="flex"></div>
+            <md-button class="md-raised md-primary" ng-click="sendMessage()">Send</md-button>
+        </div>
+    </md-content>
+</div>
