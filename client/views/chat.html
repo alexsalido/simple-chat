@@ -3,10 +3,12 @@
         <h2 class="md-toolbar-tools"><span>Chat</span></h2>
     </md-toolbar>
     <md-content layout="column">
-        <md-content class="conversation-box">
-            <div class="message-wrapper" ng-class="message.type=='received' ? 'received' : 'sent'" ng-repeat="message in conversation">
-                <div class="message" ng-class="">
-                    <span>{{message.message}}</span>
+        <md-content id="conversation-box">
+            <div ng-repeat="message in conversation">
+                <div class="message-wrapper" ng-class="message.type=='received' ? 'received' : 'sent'">
+                    <div class="message">
+                        <span>{{message.message}}</span>
+                    </div>
                 </div>
             </div>
         </md-content>

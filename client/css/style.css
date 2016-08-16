@@ -2,16 +2,13 @@
     box-sizing: border-box;
 }
 
-md-content.conversation-box {
+#conversation-box {
+    height: 300px;
     background-color: #f2f2f2;
 }
 
 div.message-wrapper {
     position: relative;
-}
-
-div.message-wrapper.sent {
-    float: right;
 }
 
 div.message {
@@ -29,6 +26,7 @@ div.received span {
 }
 
 div.sent span {
+    float: right;
     background: rgb(63, 81, 181);
 }
 
@@ -44,9 +42,8 @@ div.received div.message::before {
 }
 
 div.sent div.message::after {
-    border-width: 10px 10px 10px 10px;
+    border-width: 10px 10px 0px 0px;
     position: absolute;
-    top: 8px;
     right: 6px;
     content: ' ';
     width: 0;
