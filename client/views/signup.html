@@ -1,0 +1,41 @@
+<div layout="column" class="md-whiteframe-z1">
+    <md-toolbar>
+        <h2 class="md-toolbar-tools"><span>Signup</span></h2>
+    </md-toolbar>
+    <form name="signupForm" novalidate ng-submit="signupForm.$valid && submit(signupForm)">
+        <md-content layout="column" class="md-padding">
+            <md-input-container>
+                <label>Email</label>
+                <input type="email" name="email" ng-model="user.email" required/>
+                <div ng-messages="signupForm.email.$error" md-auto-hide="false" ng-if="signupForm.email.$touched">
+                    <div ng-message="email">Invalid email.</div>
+                    <div ng-message="required">This is required.</div>
+                    <div ng-message="dbError">{{error.message}}</div>
+                </div>
+            </md-input-container>
+            <md-input-container>
+                <label>Password</label>
+                <input type="password" name="password" ng-model="user.password" required/>
+                <div ng-messages="signupForm.password.$error" md-auto-hide="false" ng-if="signupForm.password.$touched">
+                    <div ng-message="required">This is required.</div>
+                    <div ng-message="invalid">Passwords must match.</div>
+                    <div ng-message="dbError">{{error.message}}</div>
+                </div>
+            </md-input-container>
+            <md-input-container>
+                <label>Confirm Password</label>
+                <input type="password" name="confirmation" ng-model="user.confirmation" required/>
+                <div ng-messages="signupForm.confirmation.$error">
+                    <div ng-message="required">This is required.</div>
+                    <div ng-message="validationError">Passwords must match.</div>
+                    <div ng-message="dbError">{{error.message}}</div>
+                </div>
+            </md-input-container>
+            <div layout="row" layout-align="center center" style="padding-top:20px;">
+                <md-button class="md-raised md-primary" type="submit">Signup</md-button>
+                <div flex="flex"></div>
+                <md-button href="#/" md-no-ink="md-no-ink">Already have an account?</md-button>
+            </div>
+        </md-content>
+    </form>
+</div>
