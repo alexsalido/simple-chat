@@ -14,6 +14,7 @@ MongoClient.connect(url, function(err, db) {
     }
     console.log('Successfully connected to MongoDB');
 
+    //create email index for faster searches
     db.collection('users').createIndex({
         email: 1
     }, {
@@ -21,12 +22,12 @@ MongoClient.connect(url, function(err, db) {
         name: 'email'
     });
 
-    app.use('/api/signup', function(req, res) {
+    app.post('/api/signup', function(req, res) {
         //check if email is in use
         db.collection('users').findOne({
             email: req.body.email
         }, function(err, user) {
-            if (user) {
+            if (user) { //user already exists return error
                 return res.status(400).send({
                     error: {
                         type: 'email',
@@ -34,9 +35,31 @@ MongoClient.connect(url, function(err, db) {
                     }
                 });
             }
-            db.collection('users').save(req.body, function(err, user) {
+
+            db.collection('users').save({
+                email: req.body.email,
+                password: req.body.password
+            }, function(err, user) {
                 res.send(user);
             });
+        });
+    });
+
+    app.post('/api/login', function(req, res) {
+        db.collection('users').findOne({
+            email: req.body.email
+        }, function(err, user) {
+            if (err) return res.status(400).send(err);
+            if (user.password === req.body.password) {
+                res.send('Access granted');
+            } else {
+                res.status(401).send({
+                    error: {
+                        type: 'password',
+                        message: 'Invalid credentials'
+                    }
+                });
+            }
         });
     });
 });

@@ -2,19 +2,29 @@
     <md-toolbar>
         <h2 class="md-toolbar-tools"><span>Login</span></h2>
     </md-toolbar>
-    <md-content layout="column" class="md-padding">
-        <md-input-container>
-            <label>Email</label>
-            <input type="email" ng-model="username" />
-        </md-input-container>
-        <md-input-container>
-            <label>Password</label>
-            <input type="password" ng-model="password" />
-        </md-input-container>
-        <div layout="row" layout-align="center center" style="padding-top:20px;">
-            <md-button class="md-raised md-primary">Login</md-button>
-            <div flex="flex"></div>
-            <md-button href="#/signup" md-no-ink="md-no-ink">Don't have an account yet?</md-button>
-        </div>
-    </md-content>
+    <form name="loginForm" novalidate ng-submit="loginForm.$valid && submit(loginForm)">
+        <md-content layout="column" class="md-padding">
+            <md-input-container>
+                <label>Email</label>
+                <input type="email" name="email" ng-model="user.email" required />
+                <div ng-messages="loginForm.email.$error" md-auto-hide="false" ng-if="loginForm.email.$touched">
+                    <div ng-message="email">Invalid email.</div>
+                    <div ng-message="required">This is required.</div>
+                </div>
+            </md-input-container>
+            <md-input-container>
+                <label>Password</label>
+                <input type="password" name="password" ng-model="user.password" required/>
+                <div ng-messages="loginForm.password.$error" md-auto-hide="false" ng-if="loginForm.password.$touched">
+                    <div ng-message="required">This is required.</div>
+                    <div ng-message="dbError">{{error.message}}</div>
+                </div>
+            </md-input-container>
+            <div layout="row" layout-align="center center" style="padding-top:20px;">
+                <md-button type="submit" class="md-raised md-primary">Login</md-button>
+                <div flex="flex"></div>
+                <md-button href="#/signup" md-no-ink="md-no-ink">Don't have an account yet?</md-button>
+            </div>
+        </md-content>
+    </form>
 </div>
