@@ -5,7 +5,7 @@ angular.module('SimpleChat')
             socket = io(server, {});
 
             socket.on('connect', function() {
-                console.log('Succesful connect to Socket.io');
+                console.log('Successful connect to Socket.io');
             });
         };
 
