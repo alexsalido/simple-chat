@@ -19,9 +19,9 @@
             </div>
         </md-content>
         <div class="message-box" layout="row" layout-align="center center">
-            <textarea ng-model="message"></textarea>
+            <textarea ng-model="message" ng-keypress="handleKeyPress($event)"></textarea>
             <div flex="flex"></div>
-            <md-button class="md-raised md-primary" ng-click="sendMessage()">Send</md-button>
+            <md-button class="md-raised md-primary" ng-click="sendMessage()" ng-disabled="!message">Send</md-button>
         </div>
     </md-content>
 </div>

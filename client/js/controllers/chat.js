@@ -5,6 +5,8 @@ angular.module('SimpleChat')
 
         $scope.logout = Auth.logout;
 
+        $scope.message = '';
+
         $scope.conversation = [{
             message: 'Hello!',
             type: 'received'
@@ -23,13 +25,15 @@ angular.module('SimpleChat')
         }
 
         $scope.sendMessage = function() {
-            $scope.conversation.push({
-                message: $scope.message,
-                type: 'sent'
-            });
-            socketService.sendMessage($scope.message);
-            $scope.message = '';
-            scrollToBottom();
+            if ($scope.message != '') {
+                $scope.conversation.push({
+                    message: $scope.message,
+                    type: 'sent'
+                });
+                socketService.sendMessage($scope.message);
+                $scope.message = '';
+                scrollToBottom();
+            }
         };
 
         $scope.messageReceived = function(message) {
