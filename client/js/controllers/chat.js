@@ -1,6 +1,8 @@
 angular.module('SimpleChat')
-    .controller('ChatCtrl', function($scope, $routeParams, socketService, $timeout) {
+    .controller('ChatCtrl', function($scope, $routeParams, socketService, $timeout, Auth) {
         var conversationBox = document.getElementById('conversation-box');
+
+        $scope.logout = Auth.logout;
 
         $scope.conversation = [{
             message: 'Hello!',
@@ -16,7 +18,7 @@ angular.module('SimpleChat')
         function scrollToBottom() {
             $timeout(function() {
                 conversationBox.scrollTop = conversationBox.scrollHeight;
-            }, 0, false);
+            }, 0);
         }
 
         $scope.sendMessage = function() {

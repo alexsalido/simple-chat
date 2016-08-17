@@ -1,6 +1,12 @@
 <div layout="column" class="md-whiteframe-z1">
     <md-toolbar>
-        <h2 class="md-toolbar-tools"><span>Chat</span></h2>
+        <div class="md-toolbar-tools">
+            <h2>Chat</h2>
+            <span flex></span>
+            <md-button class="md-icon-button" ng-click="logout()">
+                <md-icon md-svg-src="img/icons/logout.svg" aria-label="Logout"></md-icon>
+            </md-button>
+        </div>
     </md-toolbar>
     <md-content layout="column">
         <md-content id="conversation-box">
