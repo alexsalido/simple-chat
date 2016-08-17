@@ -10,6 +10,11 @@ var MongoClient = require('mongodb').MongoClient;
 
 var app = express();
 
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({
+    extended: false
+}));
+
 // parse application/json
 app.use(bodyParser.json());
 
@@ -22,6 +27,14 @@ MongoClient.connect(url, function(err, db) {
     }
     console.log('Successfully connected to MongoDB');
 
+    function signToken(user) {
+        return jwt.sign({
+            _id: user._id,
+            email: user.email
+        }, 'simple-chat', {
+            expiresIn: 10
+        });
+    }
     //create email index for faster searches
     db.collection('users').createIndex({
         email: 1
@@ -48,11 +61,9 @@ MongoClient.connect(url, function(err, db) {
                 email: req.body.email,
                 password: req.body.password
             }, function(err, user) {
-                var token = jwt.sign({
-                    email: req.body.email
-                }, 'simple-chat');
                 res.json({
-                    token: token
+                    token: signToken(user),
+                    user: user
                 });
             });
         });
@@ -64,11 +75,9 @@ MongoClient.connect(url, function(err, db) {
         }, function(err, user) {
             if (err) return res.status(400).send(err);
             if (user.password === req.body.password) {
-                var token = jwt.sign({
-                    email: req.body.email
-                }, 'simple-chat');
                 res.json({
-                    token: token
+                    token: signToken(user),
+                    user: user
                 });
             } else {
                 res.status(401).send({
@@ -78,6 +87,17 @@ MongoClient.connect(url, function(err, db) {
                     }
                 });
             }
+        });
+    });
+
+    app.get('/api/user', expressJWT({
+        secret: 'simple-chat'
+    }), function(req, res) {
+        db.collection('users').findOne({
+            email: req.user.email
+        }, function(err, user) {
+            if (err) return res.status(400).send(err);
+            res.json(user);
         });
     });
 });

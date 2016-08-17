@@ -1,6 +1,7 @@
 angular.module('SimpleChat')
     .controller('ChatCtrl', function($scope, $routeParams, socketService, $timeout, Auth) {
         var conversationBox = document.getElementById('conversation-box');
+        $scope.user = Auth.getCurrentUser();
 
         $scope.logout = Auth.logout;
 

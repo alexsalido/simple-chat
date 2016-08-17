@@ -11,7 +11,10 @@ angular.module('SimpleChat')
             });
         };
 
-        this.$get = function() {
+        this.$get = function(Auth) {
+            socket.on('error', function(err) {
+                Auth.logout();
+            });
             return {
                 sendMessage: function(message) {
                     socket.emit('message', {
