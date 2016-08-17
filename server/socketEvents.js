@@ -4,9 +4,11 @@ module.exports = function(io) {
         console.log('New connection from', socket.handshake.address, '@ ', socket.handshake.time);
 
         socket.on('message', function(data) {
-            socket.emit('message', {
-                message: Date.now()
-            });
+            setTimeout(function() {
+                socket.emit('message', {
+                    message: Date.now()
+                });
+            }, 500);
         });
 
     });

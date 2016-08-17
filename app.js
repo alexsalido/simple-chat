@@ -1,9 +1,17 @@
 var express = require('express');
 var bodyParser = require('body-parser');
-var app = express();
+var expressJWT = require('express-jwt');
+var jwt = require('jsonwebtoken');
+var socketioJWT = require('socketio-jwt');
+
 var io = require('socket.io');
 var socketEvents = require('./server/socketEvents.js'); //socket events
 var MongoClient = require('mongodb').MongoClient;
+
+var app = express();
+
+// parse application/json
+app.use(bodyParser.json());
 
 var url = 'mongodb://localhost:27017/simple-chat';
 
@@ -40,7 +48,12 @@ MongoClient.connect(url, function(err, db) {
                 email: req.body.email,
                 password: req.body.password
             }, function(err, user) {
-                res.send(user);
+                var token = jwt.sign({
+                    email: req.body.email
+                }, 'simple-chat');
+                res.json({
+                    token: token
+                });
             });
         });
     });
@@ -51,7 +64,12 @@ MongoClient.connect(url, function(err, db) {
         }, function(err, user) {
             if (err) return res.status(400).send(err);
             if (user.password === req.body.password) {
-                res.send('Access granted');
+                var token = jwt.sign({
+                    email: req.body.email
+                }, 'simple-chat');
+                res.json({
+                    token: token
+                });
             } else {
                 res.status(401).send({
                     error: {
@@ -67,12 +85,14 @@ MongoClient.connect(url, function(err, db) {
 app.use(express.static(__dirname + '/client'));
 app.use('/bower_components', express.static(__dirname + '/bower_components'));
 
-// parse application/json
-app.use(bodyParser.json())
-
 var server = app.listen(3000, function() {
     console.log('Express server listening on port', 3000);
 });
 
 //initialize socket
-socketEvents(io(server));
+io = io(server);
+io.use(socketioJWT.authorize({
+    secret: 'simple-chat',
+    handshake: true
+}));
+socketEvents(io);
