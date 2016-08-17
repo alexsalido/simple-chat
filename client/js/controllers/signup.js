@@ -2,6 +2,10 @@ angular.module('SimpleChat')
     .controller('SignupCtrl', function($scope, $location, $http, Auth) {
         $scope.user = {};
 
+        /**
+         * Validates and submits signup form
+         * @param {Object} form - Signup form element
+         */
         $scope.submit = function(form) {
             $scope.error = {}; //reset errors
             var user = $scope.user;

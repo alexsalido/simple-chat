@@ -1,5 +1,5 @@
 angular.module('SimpleChat')
-    .controller('ChatCtrl', function($scope, $routeParams, socketService, $timeout, Auth) {
+    .controller('ChatCtrl', function($scope, socketService, $timeout, Auth) {
         var conversationBox = document.getElementById('conversation-box');
         $scope.user = Auth.getCurrentUser();
 
@@ -18,14 +18,16 @@ angular.module('SimpleChat')
             type: 'sent'
         }];
 
+        /** Scrolls conversationBox to bottom when message is sent/received */
         function scrollToBottom() {
             $timeout(function() {
                 conversationBox.scrollTop = conversationBox.scrollHeight;
             }, 0);
         }
 
+        /** Sends message to server. */
         $scope.sendMessage = function() {
-            if ($scope.message != '') {
+            if ($scope.message !== '') {
                 $scope.conversation.push({
                     message: $scope.message,
                     type: 'sent'
@@ -36,6 +38,10 @@ angular.module('SimpleChat')
             }
         };
 
+        /**
+         * Triggers when message is received.
+         * @param {string} message - Message received from server
+         */
         $scope.messageReceived = function(message) {
             $scope.conversation.push({
                 message: message,

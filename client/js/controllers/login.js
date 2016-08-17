@@ -2,6 +2,10 @@ angular.module('SimpleChat')
     .controller('LoginCtrl', function($scope, $location, $http, Auth) {
         $scope.user = {};
 
+        /**
+         * Validates and submits login form
+         * @param {Object} form - Login form element
+         */
         $scope.submit = function(form) {
             $scope.error = {}; //reset errors
             Auth.login($scope.user, function(err) {
@@ -14,5 +18,5 @@ angular.module('SimpleChat')
                     $location.url('/chat');
                 }
             });
-        }
+        };
     });

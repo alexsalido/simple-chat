@@ -7,9 +7,16 @@ angular.module('SimpleChat')
         }
 
         return {
+            /** Returns current user. */
             getCurrentUser: function() {
                 return currentUser;
             },
+
+            /**
+             * Sends login request to server, if successful it saves token and updates currentUser
+             * @param {object} user - user object
+             * @param {function} cb - callback function
+             */
             login: function(user, cb) {
                 $http.post('/api/login', user).then(function(res) {
                     if (res.data.token) {
@@ -22,15 +29,24 @@ angular.module('SimpleChat')
                     cb(err);
                 });
             },
+
+            /** Logs out user, deletes token and redirects to '/' */
             logout: function() {
                 currentUser = {};
                 localStorage.removeItem('token');
                 token = null;
                 $location.url('/');
             },
+
+            /**
+             * Sends signup request to server, if successful it saves token and updates currentUser
+             * @param {object} user - user object
+             * @param {function} cb - callback function
+             */
             signup: function(user, cb) {
                 $http.post('/api/signup', user).then(function(res) {
                     if (res.data.token) {
+                        currentUser = res.data.user;
                         localStorage.setItem('token', res.data.token);
                         cb();
                     }
@@ -38,9 +54,19 @@ angular.module('SimpleChat')
                     cb(err);
                 });
             },
+
+            /**
+             * Returns token, checks localStore if it hasn't been retreived.
+             * @returns {string}
+             */
             getToken: function() {
                 return token || localStorage.getItem('token');
             },
+
+            /**
+             * Checks user authorization
+             * @param {function} cb - callback function, gets called with true if authorized, otherwise with false.
+             */
             isAuthorized: function(cb) {
                 if (currentUser.hasOwnProperty('$promise')) {
                     currentUser.$promise.then(function(res) {
