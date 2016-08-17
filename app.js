@@ -32,7 +32,7 @@ MongoClient.connect(url, function(err, db) {
             _id: user._id,
             email: user.email
         }, 'simple-chat', {
-            expiresIn: 10
+            expiresInMinutes: 60 * 5
         });
     }
     //create email index for faster searches
