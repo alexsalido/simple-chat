@@ -1,7 +1,7 @@
 var app = angular.module('SimpleChat', ['ngMaterial', 'ngRoute', 'ngMessages', 'ngResource'])
-    .controller('MainCtrl', function($scope, $route, $routeParams, $location) {
-
-    })
+    .controller('MainCtrl', function() {})
+    .constant('SERVER_URL', 'localhost')
+    .constant('SERVER_PORT', 3000)
     .config(function($routeProvider, $locationProvider, socketServiceProvider) {
         $routeProvider.when('/', {
             templateUrl: '/views/login.html',
@@ -41,11 +41,11 @@ var app = angular.module('SimpleChat', ['ngMaterial', 'ngRoute', 'ngMessages', '
             templateUrl: '/views/chat.html',
             controller: 'ChatCtrl',
             resolve: {
-                checkAuthorization: function($q, $location, Auth) {
+                checkAuthorization: function($q, $location, Auth, SERVER_URL, SERVER_PORT) {
                     var q = $q.defer();
                     Auth.isAuthorized(function(authorized) {
                         if (authorized) {
-                            socketServiceProvider.startSocket('192.168.1.233:3000', Auth.getToken());
+                            socketServiceProvider.startSocket(SERVER_URL + ':' + SERVER_PORT, Auth.getToken());
                             q.resolve();
                         } else {
                             $location.url('/');
