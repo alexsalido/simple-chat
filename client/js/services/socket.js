@@ -8,7 +8,8 @@ angular.module('SimpleChat')
          */
         this.startSocket = function(server, token) {
             socket = io(server, {
-                'query': 'token=' + token
+                'query': 'token=' + token,
+                'reconnection': false
             });
             socket.on('connect', function() {
                 console.log('Successful connect to Socket.io');
@@ -17,8 +18,15 @@ angular.module('SimpleChat')
 
         this.$get = function(Auth) {
             socket.on('error', function(err) {
+                console.log('Socket error, redirecting to login');
                 Auth.logout();
             });
+
+            socket.on('disconnect', function() {
+                console.log('Socket disconnect, redirecting to login');
+                Auth.logout();
+            });
+
             return {
                 /**
                  * Sends message to server
@@ -31,7 +39,7 @@ angular.module('SimpleChat')
                 },
                 /**
                  * Syncs messages array
-                 * @param {function} cb - will execute each time a message is received with the message as an argument 
+                 * @param {function} cb - will execute each time a message is received with the message as an argument
                  */
                 syncMessages: function(cb) {
                     socket.on('message', function(data) {

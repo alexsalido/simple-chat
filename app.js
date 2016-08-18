@@ -111,7 +111,9 @@ MongoClient.connect(url, function(err, db) {
                     user: user
                 });
             }
-            return res.status(401).send();
+            return res.status(401).send({
+                err: 'Invalid credentials'
+            });
         });
     });
 
