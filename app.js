@@ -8,6 +8,8 @@ var io = require('socket.io');
 var socketEvents = require('./server/socketEvents.js'); //socket events
 var MongoClient = require('mongodb').MongoClient;
 
+var crypto = require('crypto');
+
 var app = express();
 
 // parse application/x-www-form-urlencoded
@@ -19,6 +21,21 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 
 var url = 'mongodb://localhost:27017/simple-chat';
+
+var algorithm = 'aes-256-cbc';
+
+function encryptPassword(password, salt) {
+    if (!password || !salt) return '';
+    return crypto.pbkdf2Sync(password, new Buffer(salt, 'base64'), 10000, 64).toString('base64');
+}
+
+function makeSalt() {
+    return crypto.randomBytes(16).toString('base64');
+}
+
+function authenticate(password, salt, hashedPassword) {
+    return encryptPassword(password, salt) === hashedPassword;
+}
 
 MongoClient.connect(url, function(err, db) {
     if (err) {
@@ -32,7 +49,7 @@ MongoClient.connect(url, function(err, db) {
             _id: user._id,
             email: user.email
         }, 'simple-chat', {
-            expiresInMinutes: 60 * 5
+            expiresIn: '1d'
         });
     }
     //create email index for faster searches
@@ -57,10 +74,16 @@ MongoClient.connect(url, function(err, db) {
                 });
             }
 
-            db.collection('users').save({
+            var salt = makeSalt();
+
+            user = {
                 email: req.body.email,
-                password: req.body.password
-            }, function(err, user) {
+                password: encryptPassword(req.body.password, salt),
+                salt: salt
+            }
+
+            db.collection('users').insertOne(user, function(err, doc) {
+                user._id = doc.insertedId;
                 res.json({
                     token: signToken(user),
                     user: user
@@ -74,19 +97,21 @@ MongoClient.connect(url, function(err, db) {
             email: req.body.email
         }, function(err, user) {
             if (err) return res.status(400).send(err);
-            if (user.password === req.body.password) {
-                res.json({
-                    token: signToken(user),
-                    user: user
-                });
-            } else {
-                res.status(401).send({
+            if (!user) {
+                return res.status(401).send({
                     error: {
                         type: 'password',
                         message: 'Invalid credentials'
                     }
                 });
             }
+            if (authenticate(req.body.password, user.salt, user.password)) {
+                return res.json({
+                    token: signToken(user),
+                    user: user
+                });
+            }
+            return res.status(401).send();
         });
     });
 

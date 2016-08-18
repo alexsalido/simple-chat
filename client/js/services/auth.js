@@ -47,6 +47,7 @@ angular.module('SimpleChat')
                 $http.post('/api/signup', user).then(function(res) {
                     if (res.data.token) {
                         currentUser = res.data.user;
+                        token = res.data.token;
                         localStorage.setItem('token', res.data.token);
                         cb();
                     }

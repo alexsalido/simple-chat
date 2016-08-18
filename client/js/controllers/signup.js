@@ -12,7 +12,10 @@ angular.module('SimpleChat')
             if (user.password !== user.confirmation) {
                 form.password.$error.invalid = true;
             } else {
-                Auth.signup(user, function(err) {
+                Auth.signup({
+                    email: user.email,
+                    password: user.password
+                }, function(err) {
                     if (err) {
                         $scope.error = err.data.error;
                         if ($scope.error) {
