@@ -112,7 +112,10 @@ MongoClient.connect(url, function(err, db) {
                 });
             }
             return res.status(401).send({
-                err: 'Invalid credentials'
+                error: {
+                    message: 'Invalid credentials',
+                    type: 'password'
+                }
             });
         });
     });
