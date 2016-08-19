@@ -2,7 +2,7 @@
 Simple chat service using Socket.io and AngularJS.
 
 ## Build
-Run `grunt` for building
+Run `grunt`
 
 #features
 Real-time communication using Socket.io (Server responds with a dummy message).
