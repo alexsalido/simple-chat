@@ -4,7 +4,7 @@
   "description": "Simple chat application using Socket.io, Angular and Angular Material",
   "main": "app.js",
   "scripts": {
-    "start": "grunt",
+    "start": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Alejandro Salido",
