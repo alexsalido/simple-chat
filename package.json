@@ -4,6 +4,7 @@
   "description": "Simple chat application using Socket.io, Angular and Angular Material",
   "main": "app.js",
   "scripts": {
+    "postinstall": "bower install",
     "start": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
