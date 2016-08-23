@@ -135,8 +135,8 @@ MongoClient.connect(url, function(err, db) {
 app.use(express.static(__dirname + '/client'));
 app.use('/bower_components', express.static(__dirname + '/bower_components'));
 
-var server = app.listen(3000, function() {
-    console.log('Express server listening on port', 3000);
+var server = app.listen(process.env.PORT, function() {
+    console.log('Express server listening on port', process.env.PORT);
 });
 
 //initialize socket
