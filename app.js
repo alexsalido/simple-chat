@@ -20,7 +20,7 @@ app.use(bodyParser.urlencoded({
 // parse application/json
 app.use(bodyParser.json());
 
-var url = 'mongodb://localhost:27017/simple-chat';
+var url = process.env.MONGODB_URI; //'mongodb://localhost:27017/simple-chat'
 
 var algorithm = 'aes-256-cbc';
 
@@ -48,7 +48,7 @@ MongoClient.connect(url, function(err, db) {
         return jwt.sign({
             _id: user._id,
             email: user.email
-        }, 'simple-chat', {
+        }, process.env.SECRET, {
             expiresIn: '1d'
         });
     }
@@ -142,7 +142,7 @@ var server = app.listen(3000, function() {
 //initialize socket
 io = io(server);
 io.use(socketioJWT.authorize({
-    secret: 'simple-chat',
+    secret: process.env.SECRET,
     handshake: true
 }));
 socketEvents(io);
