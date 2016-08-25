@@ -6,8 +6,8 @@ angular.module('SimpleChat')
          * @param {string} server - server url (url:port)
          * @param {string} token - jwt token
          */
-        this.startSocket = function(server, token) {
-            socket = io(server, {
+        this.startSocket = function(token) {
+            socket = io('', {
                 'query': 'token=' + token,
                 'reconnection': false
             });
