@@ -20,6 +20,8 @@
     "socketio-jwt": "^4.5.0"
   },
   "devDependencies": {
-    "grunt-contrib-watch": "^1.0.0"
+    "grunt-contrib-watch": "^1.0.0",
+    "grunt-env": "^0.4.4",
+    "grunt-express-server": "^0.5.3"
   }
 }
